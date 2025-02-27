@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To My Greatest Constant</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #1a1a1a, #2a0f47);
+            font-family: 'Arial', sans-serif;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .constellation {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 1.5s infinite;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            max-width: 600px;
+            text-align: center;
+            transform: scale(0.9);
+            opacity: 0;
+            animation: containerEntry 1s 0.5s forwards;
+        }
+
+        h1 {
+            font-family: 'Dancing Script', cursive;
+            color: #fff;
+            font-size: 3.5em;
+            margin-bottom: 20px;
+            background: linear-gradient(45deg, #ff6b6b, #ff8e8e);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        h2 {
+            font-family: 'Dancing Script', cursive;
+            color: #fff;
+            font-size: 1.5em;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, #ff6b6b, #ff8e8e);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .message {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.2em;
+            line-height: 1.6;
+            margin: 25px 0;
+        }
+
+        .button-container {
+            margin-top: 30px;
+            position: relative;
+        }
+
+        .btn {
+            padding: 15px 40px;
+            margin: 0 15px;
+            border: none;
+            border-radius: 30px;
+            font-size: 1.2em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+
+        #yesBtn {
+            background: linear-gradient(45deg, #ff6b6b, #ff8e8e);
+            color: white;
+        }
+
+        #noBtn {
+            background: rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        #yesBtn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 20px rgba(255, 107, 107, 0.5);
+        }
+
+        .love-letter {
+            display: none;
+            color: rgba(255, 255, 255, 0.9);
+            text-align: left;
+            max-height: 60vh;
+            overflow-y: auto;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            margin-top: 30px;
+            font-family: 'Crimson Text', serif;
+            line-height: 1.8;
+            position: relative;
+        }
+
+        .love-letter::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAMAAAAp4XiDAAAAUVBMVEWFhYWDg4N3d3dtbW17e3t1dXWBgYGHh4d5eXlzc3OLi4ubm5uVlZWPj4+NjY19fX2JiYl/f39ra2uRkZGZmZlpaWmXl5dvb29xcXGTk5NnZ2c8TV1mAAAAG3RSTlNAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEAvEOwtAAAFVklEQVR4XpWWB67c2BUFb3g557T/hRo9/WUMZHlgr4Bg8Z4qQgQJlHI4A8SzFVrapvmTF9O7dmYRFZ60YiBhJRCgh1FYhiLAmdvX0CzTOpNE77ME0Zty/nWWzchDtiqrmQDeuv3powQ5ta2eN0FY0InkqDD73lT9c9lEzwUNqgFHs9VQce3TVClFCQrSTfOiYkVJQBmpbq2L6iZavPnAPcoU0dSw0SUTqz/GtrGuXfbyyBniKykOWQWGqwwMA7QiYAxi+IlPdqo+hYHnUt5ZPfnsHJyNiDtnpJyayNBkF6cWoYGAMY92U2hXHF/C1M8uP/ZtYdiuj26UdAdQQSXQErwSOMzt/XWRWAz5GuSBIkwG1H3FabJ2OsUOUhGC6tK4EMtJO0ttC6IBD3kM0ve0tJwMdSfjZo+EEISaeTr9P3wYrGjXqyC1krcKdhMpxEnt5JetoulscpyzhXN5FRpuPHvbeQaKxFAEB6EN+cYN6xD7RYGpXpNndMmZgM5Dcs3YSNFDHUo2LGfZuukSWyUYirJAdYbF3MfqEKmjM+I2EfhA94iG3L7uKrR+GdWD73ydlIB+6hgref1QTlmgmbM3/LeX5GI1Ux1RWpgxpLuZ2+I+IjzZ8wqE4nilvQdkUdfhzI5QDWy+kw5Wgg2pGpeEVeCCA7b85BO3F9DzxB3cdqvBzWcmzbyMiqhzuYqtHRVG2y4x+KOlnyqla8AoWWpuBoYRxzXrfKuILl6SfiWCbjxoZJUaCBj1CjH7GIaDbc9kqBY3W/Rgjda1iqQcOJu2WW+76pZC9QG7M00dffe9hNnseupFL53r8F7YHSwJWUKP2q+k7RdsxyOB11n0xtOvnW4irMMFNV4H0uqwS5ExsmP9AxbDTc9JwgneAT5vTiUSm1E7BSflSt3bfa1tv8Di3R8n3Af7MNWzs49hmauE2wP+ttrq+AsWpFG2awvsuOqbipWHgtuvuaAE+A1Z/7gC9hesnr+7wqCwG8c5yAg3AL1fm8T9AZtp/bbJGwl1pNrE7RuOX7PeMRUERVaPpEs+yqeoSmuOlokqw49pgomjLeh7icHNlG19yjs6XXOMedYm5xH2YxpV2tc0Ro2jJfxC50ApuxGob7lMsxfTbeUv07TyYxpeLucEH1gNd4IKH2LAg5TdVhlCafZvpskfncCfx8pOhJzd76bJWeYFnFciwcYfubRc12Ip/ppIhA1/mSZ/RxjFDrJC5xifFjJpY2Xl5zXdguFqYyTR1zSp1Y9p+tktDYYSNflcxI0iyO4TPBdlRcpeqjK/piF5bklq77VSEaA+z8qmJTFzIWiitbnzR794USKBUaT0NTEsVjZqLaFVqJoPN9ODG70IPbfBHKK+/q/AWR0tJzYHRULOa4MP+W/HfGadZUbfw177G7j/OGbIs8TahLyynl4X4RinF793Oz+BU0saXtUHrVBFT/DnA3ctNPoGbs4hRIjTok8i+algT1lTHi4SxFvONKNrgQFAq2/gFnWMXgwffgYMJpiKYkmW3tTg3ZQ9Jq+f8XN+A5eeUKHWvJWJ2sgJ1Sop+wwhqFVijqWaJhwtD8MNlSBeWNNWTa5Z5kPZw5+LbVT99wqTdx29lMUH4OIG/D86ruKEauBjvH5xy6um/Sfj7ei6UUVk4AIl3MyD4MSSTOFgSwsH/QJWaQ5as7ZcmgBZkzjjU1UrQ74ci1gWBCSGHtuV1H2mhSnO3Wp/3fEV5a+4wz//6qy8JxjZsmxxy5+4w9CDNJY09T072iKG0EnOS0arEYgXqYnXcYHwjTtUNAcMelOd4xpkoqiTYICWFq0JSiPfPDQdnt+4/wuqcXY47QILbgAAAABJRU5ErkJggg==');
+            opacity: 0.1;
+        }
+
+        @keyframes containerEntry {
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+
+        .float-away {
+            animation: floatOff 1.5s forwards !important;
+        }
+
+        @keyframes floatOff {
+            0% { transform: translate(0, 0) rotate(0deg); opacity: 1; }
+            100% { transform: translate(calc(-100vw - 100%), -100vh) rotate(-720deg); opacity: 0; }
+        }
+
+        .heart {
+            position: absolute;
+            pointer-events: none;
+            animation: floatUp 3s linear forwards;
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(0) scale(1); opacity: 1; }
+            100% { transform: translateY(-100vh) scale(0); opacity: 0; }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                width: 90%;
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2.5em;
+            }
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Text&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+
+
+</head>
+<body>
+
+    <div class="constellation" id="constellation"></div>
+    
+    <div class="container">
+        <h1>The moon is beautiful, isn't it? </h1>
+         <div>
+            <audio controls autoplay loop >
+            <source src="Once Upon A Time.mp3">
+        </div>
+        
+        
+        <p class="message">
+            Feelings can exist in multiple states until they are observed — I consider it a paradox,<br>
+            a Schrödinger’s cat.<br>
+            Are you real? Or is it just a thought I can't escape? <br>
+            Once you opened the box, it would no longer be considered a paradox
+        </p>
+
+        <div class="button-container">
+            <button class="btn" id="yesBtn">Yes, for the uncertainties to vanish ❤️</button>
+            <button class="btn" id="noBtn">I reject that hypothesis 💔</button>
+        </div>
+        
+
+        <div class="love-letter" id="loveLetter">
+           
+            <h2>Dear <strongS>Shoutti</strong>,</h2>
+
+            <p>Your warmth and gentleness gradually made me feel safe little by little, it feels therapeutic.</p>
+            <p>Just like a placebo but please darling don't let everything reduce to nothing.</p>
+            <p><em>Dopamine, serotonin, oxytocin, endorphins</em></p>
+            <p>Every neurotransmitter</p>
+            <p>Takes me closer to <strong>you</strong></p>
+            <p>But you know what's better? </p>
+            <p>It’s the depth of shared understanding, the moments where everything feels so aligned, and the unspoken things between us fill the space with meaning. Perhaps it’s the genuine <em>connection</em>, the one that doesn't need to be explained by a chemical boost because it’s built on trust, resonance, and presence.</p>
+            <p>I'm an artist, <em>you are my muse </em>— take me to the otherworld</p>
+            <p>if my feelings aren't reciprocated, and let these thoughts of mine be a ghost. I'm channeling those intangible, ephemeral feelings into something that transcends the ordinary — even if your feelings fade away into the abyss,</p>
+            <p> May you stay as a subject in the landscape of my imagination.</p>
+            <br>
+            <p>We were always meant to find each other as if the universe itself conspired to create this <em>connection</em>, it tried so hard to shape us into what we are today.</p>
+            <p>Maybe it's <strong>not</strong> just a coincidence at all.</p>
+            <p>Every heartbreak that we experienced, every joy, it prepared us for the beauty of this moment. Our time was never wasted at all.</p>
+            <p>Isn't it strange?</p>
+            <p>Suddenly, I find myself glad for all the painful experiences just to find myself getting closer to you, even in 1 millimeter.</p>
+            <br>
+            <h4>The air around you dissipates,</h4>
+<h4>Lingering in my lungs long after you’ve gone.</h4>
+<h4>Each contraction of my cardiac muscle screams your presence,</h4>
+<h4>Your smile, your voice — carved into the rhythm of my pulse. <em>It yearns only for you.</em> </h4>
+<h4>You are my constant, the one I can hold onto, and I want to stay in this moment forever, with you beside me. With every step we take together, my heart grows more certain that you are the one I want to spend through life with. </h4>
+<br>
+            <p><strong>So here I am bending my chest open so you can reach my heart.💕</strong> </p>
+<br>
+            <h2><strongS>XOXO,</strong></h2>
+                <h2>Arashi</h2>
+                <br>
+           
+
+        </div>
+    </div>
+
+    <script>
+        // Create dynamic constellation
+        function createConstellation() {
+            const container = document.getElementById('constellation');
+            for(let i = 0; i < 200; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.width = Math.random() * 3 + 'px';
+                star.style.height = star.style.width;
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.animationDelay = Math.random() * 2 + 's';
+                container.appendChild(star);
+            }
+        }
+
+        // Yes button handler
+        document.getElementById('yesBtn').addEventListener('click', () => {
+            document.getElementById('loveLetter').style.display = 'block';
+            document.querySelector('.button-container').style.display = 'none';
+            
+            // Create floating hearts
+            for(let i = 0; i < 50; i++) {
+                const heart = document.createElement('div');
+                heart.className = 'heart';
+                heart.innerHTML = '❤️';
+                heart.style.left = Math.random() * 100 + '%';
+                heart.style.fontSize = Math.random() * 20 + 15 + 'px';
+                heart.style.animationDuration = Math.random() * 2 + 3 + 's';
+                document.body.appendChild(heart);
+            }
+        });
+
+        // No button handler
+        document.getElementById('noBtn').addEventListener('mouseover', () => {
+            const btn = document.getElementById('noBtn');
+            const x = Math.random() * 80 - 40;
+            const y = Math.random() * 80 - 40;
+            btn.style.transform = `translate(${x}px, ${y}px)`;
+        });
+
+        document.getElementById('noBtn').addEventListener('click', () => {
+            const btn = document.getElementById('noBtn');
+            btn.classList.add('float-away');
+            setTimeout(() => {
+                btn.style.display = 'none';
+            }, 1500);
+        });
+
+        // Initialize
+        createConstellation();
+        setTimeout(() => {
+            document.querySelector('.container').style.transform = 'scale(1)';
+            document.querySelector('.container').style.opacity = '1';
+        }, 500);
+    </script>
+</body>
+</html>
